@@ -1,0 +1,92 @@
+from __future__ import annotations
+
+from typing import Dict, List, Protocol, Union, runtime_checkable
+
+from rasa.shared.providers.llm.llm_response import LLMResponse
+
+
+@runtime_checkable
+class LLMClient(Protocol):
+    """
+    Protocol for an LLM client that specifies the interface for interacting
+    with the API.
+    """
+
+    @classmethod
+    def from_config(cls, config: dict) -> LLMClient:
+        """
+        Initializes the llm client with the given configuration.
+
+        This class method should be implemented to parse the given
+        configuration and create an instance of an llm client.
+        """
+        ...
+
+    @property
+    def config(self) -> Dict:
+        """
+        Returns the configuration for that the llm client is initialized with.
+
+        This property should be implemented to return a dictionary containing
+        the configuration settings for the llm client.
+        """
+        ...
+
+    def completion(self, messages: Union[List[dict], List[str], str]) -> LLMResponse:
+        """
+        Synchronously generate completions for given list of messages.
+
+        This method should be implemented to take a list of messages (as
+        strings) and return a list of completions (as strings).
+
+        Args:
+            messages: The message can be,
+                - a list of preformatted messages. Each message should be a dictionary
+                    with the following keys:
+                    - content: The message content.
+                    - role: The role of the message (e.g. user or system).
+                - a list of messages. Each message is a string and will be formatted
+                    as a user message.
+                - a single message as a string which will be formatted as user message.
+        Returns:
+            LLMResponse
+        """
+        ...
+
+    async def acompletion(
+        self, messages: Union[List[dict], List[str], str]
+    ) -> LLMResponse:
+        """
+        Asynchronously generate completions for given list of messages.
+
+        This method should be implemented to take a list of messages (as
+        strings) and return a list of completions (as strings).
+
+        Args:
+            messages: The message can be,
+                - a list of preformatted messages. Each message should be a dictionary
+                    with the following keys:
+                    - content: The message content.
+                    - role: The role of the message (e.g. user or system).
+                - a list of messages. Each message is a string and will be formatted
+                    as a user message.
+                - a single message as a string which will be formatted as user message.
+        Returns:
+            LLMResponse
+        """
+        ...
+
+    def validate_client_setup(self, *args, **kwargs) -> None:  # type: ignore
+        """
+        Perform client setup validation.
+
+        This method should be implemented to validate whether the client can be
+        used with the parameters provided through configuration or environment
+        variables.
+
+        If there are any issues, the client should raise
+        ProviderClientValidationError.
+
+        If no validation is needed, this check can simply pass.
+        """
+        ...

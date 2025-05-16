@@ -1,0 +1,44 @@
+mapping:
+  llm_judge:
+    type: map
+    mapping:
+      llm:
+        type: map
+        allowempty: true
+        mapping:
+          provider:
+            type: str
+            nullable: false
+          model:
+            type: str
+            nullable: false
+          model_group:
+            type: str
+            nullable: false
+      embeddings:
+        type: map
+        allowempty: true
+        mapping:
+          provider:
+            type: str
+            nullable: false
+          model:
+            type: str
+            nullable: false
+          model_group:
+            type: str
+            nullable: false
+  llm_e2e_test_conversion:
+    type: map
+    mapping:
+      provider:
+        type: str
+      model:
+        type: str
+      deployment:
+        type: str
+      api_base:
+        type: str
+      "=":
+        type: any
+
